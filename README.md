@@ -52,9 +52,13 @@
 </details>
 
 ## 🛠️ Tech Stack
-- 언어 : Java - JDK 17, Groovy
-- 프레임워크 : Spring Boot 3.2.5
-- 데이터베이스 : Mysql - 8.0.28
+- 언어 : Java 17
+- 프레임워크 : Spring Boot 3.3.0
+- 데이터베이스 : MySQL 8.0.28
+- Spring Security
+- JWT
+- JPA
+- GitHub
 
 ## 🔖 Features
 - 사용자 인증
