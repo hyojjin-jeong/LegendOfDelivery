@@ -31,6 +31,9 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "likes_count")
+    private Long likesCount;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
@@ -62,6 +65,7 @@ public class User extends Timestamped {
         this.role = role;
         this.status = status;
         this.oauth = oauth;
+        this.likesCount = 0L;
     }
 
     public User(KakaoUserDto kakaoUserDto, String password, UserRole role, UserStatus status, UserOauth oauth) {
@@ -73,6 +77,7 @@ public class User extends Timestamped {
         this.role = role;
         this.status = status;
         this.oauth = oauth;
+        this.likesCount = 0L;
     }
 
     public void encryptionPassword(String encryptionPassword) {
@@ -103,6 +108,14 @@ public class User extends Timestamped {
 
     public void updateUserRole(UserRole role) {
         this.role = role;
+    }
+
+    public void upLikesCount(){
+        this.likesCount += 1L;
+    }
+
+    public void downLikesCount(){
+        this.likesCount -= 1L;
     }
 
 }

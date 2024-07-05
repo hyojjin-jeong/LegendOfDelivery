@@ -5,6 +5,7 @@ import com.sparta.legendofdelivery.domain.like.repository.LikeRepository;
 import com.sparta.legendofdelivery.domain.review.entity.Review;
 import com.sparta.legendofdelivery.domain.review.repository.ReviewRepository;
 import com.sparta.legendofdelivery.domain.user.entity.User;
+import com.sparta.legendofdelivery.domain.user.repository.UserRepository;
 import com.sparta.legendofdelivery.global.dto.MessageResponse;
 import com.sparta.legendofdelivery.global.exception.BadRequestException;
 import com.sparta.legendofdelivery.global.exception.NotFoundException;
@@ -16,13 +17,14 @@ public class LikeService {
 
     private final LikeRepository likeRepository;
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
-    public LikeService(LikeRepository likeRepository, ReviewRepository reviewRepository) {
+    public LikeService(LikeRepository likeRepository, ReviewRepository reviewRepository, UserRepository userRepository) {
         this.likeRepository = likeRepository;
         this.reviewRepository = reviewRepository;
+        this.userRepository = userRepository;
     }
 
-    @Transactional
     public MessageResponse addLike(Long reviewId, User user) {
 
         Review review = findReviewById(reviewId);
@@ -37,14 +39,16 @@ public class LikeService {
             throw new BadRequestException("이미 좋아요를 누른 리뷰입니다.");
         } else {
             Like like = new Like(review, user);
-            likeRepository.save(like);
             review.upLikesCount();
+            user.upLikesCount();
+            likeRepository.save(like);
+            reviewRepository.save(review);
+            userRepository.save(user);
             return new MessageResponse(200, "좋아요 등록에 성공했습니다.");
         }
 
     }
 
-    @Transactional
     public MessageResponse deleteLike(Long reviewId, User user) {
 
         Review review = findReviewById(reviewId);
@@ -53,8 +57,11 @@ public class LikeService {
         if (checkIslike == null) {
             throw new NotFoundException("해당 리뷰는 좋아요가 등록되어 있지 않습니다.");
         } else {
-            likeRepository.delete(checkIslike);
             review.downLikesCount();
+            user.downLikesCount();
+            likeRepository.delete(checkIslike);
+            reviewRepository.save(review);
+            userRepository.save(user);
             return new MessageResponse(200, "좋아요 취소를 성공했습니다.");
         }
 
