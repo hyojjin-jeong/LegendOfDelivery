@@ -5,13 +5,7 @@ import com.sparta.legendofdelivery.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.legendofdelivery.domain.store.entity.Store;
 import com.sparta.legendofdelivery.domain.user.entity.User;
 import com.sparta.legendofdelivery.global.entity.Timestamped;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +28,9 @@ public class Review extends Timestamped {
   @JoinColumn(name = "store_id")
   private Store store;
 
+  @Column(name = "likes_count")
+  private Long likesCount;
+
 //  @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
 //  private List<Like> likeList = new ArrayList<>();
 
@@ -41,12 +38,21 @@ public class Review extends Timestamped {
     this.content = requestDto.getComment();
     this.store = store;
     this.user = user;
+    this.likesCount = 0L;
   }
 
   public void updateReview(UpdateReviewRequestDto requestDto,Store store, User user) {
     this.content = requestDto.getContent();
     this.store = store;
     this.user = user;
+  }
+
+  public void upLikesCount(){
+    this.likesCount += 1L;
+  }
+
+  public void downLikesCount(){
+    this.likesCount -= 1L;
   }
 
 }

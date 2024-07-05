@@ -18,6 +18,7 @@ public class UserReviewResponseDto {
                                           .map(review -> new ReviewResponseDto(
                                                   review.getId(),
                                                   review.getContent(),
+                                                  review.getLikesCount(),
                                                   review.getCreateAt(),
                                                   review.getModifiedAt()
                                               )

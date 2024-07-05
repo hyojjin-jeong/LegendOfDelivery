@@ -22,6 +22,7 @@ public class StoreByReviewResponseDto {
                                           .map(review -> new ReviewResponseDto(
                                                   review.getId(),
                                                   review.getContent(),
+                                                  review.getLikesCount(),
                                                   review.getCreateAt(),
                                                   review.getModifiedAt()
                                               )
